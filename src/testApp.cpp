@@ -34,7 +34,7 @@ void testApp::setup(){
 		//cam.setDistance(100);
 
 	udpConnection.Create();
-	udpConnection.Bind(12001);
+	udpConnection.Bind(12002);
 	udpConnection.SetNonBlocking(true);
 
 }
@@ -64,7 +64,7 @@ void testApp::update(){
 	}*/
 
 }
-
+ 
 
 float Y=10;
 //--------------------------------------------------------------
