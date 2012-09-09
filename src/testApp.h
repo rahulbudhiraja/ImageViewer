@@ -31,8 +31,10 @@ public:
 	ofMaterial material;
 	ofTexture tex;
 	ofLight	light;
-
+	ofVec3f receivedPosition,modelInitialPosition,receivedRotation;
+	
 	ofEasyCam cam;
+	
 
 	ofxUDPManager udpConnection;
 };

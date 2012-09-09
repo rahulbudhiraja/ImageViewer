@@ -1,5 +1,8 @@
 #include "testApp.h"
 
+
+float x_conversion=0.8,y_conversion=0.9375;
+float scaling_factor=1.0,prevRotY=0,prevRotZ=0;;
 //--------------------------------------------------------------
 void testApp::setup(){
 
@@ -37,6 +40,9 @@ void testApp::setup(){
 	udpConnection.Bind(12002);
 	udpConnection.SetNonBlocking(true);
 
+	modelInitialPosition.x=-model.getPosition().x;
+	modelInitialPosition.y=-model.getPosition().y/2;
+
 }
 
 //--------------------------------------------------------------
@@ -49,20 +55,32 @@ void testApp::update(){
 	if(message.length()>0)
 	std::cout<<"Message Received"<<message<<"\n\n";
 
-	/*if(message!=""){
-		stroke.clear();
-		float x,y;
-		vector<string> strPoints = ofSplitString(message,"[/p]");
-		for(int i=0;i<strPoints.size();i++){
-			vector<string> point = ofSplitString(strPoints[i],"|");
-			if( point.size() == 2 ){
-				x=atof(point[0].c_str());
-				y=atof(point[1].c_str());
-				stroke.push_back(ofPoint(x,y));
-			}
-		}
-	}*/
+	if(message!="")
+	{
+		vector<string> components= ofSplitString(message,",");
+		
+		if(components[0]=="Translation")
+		{
+			;
+			/*receivedPosition.x=ofToFloat(components[2]);
+			receivedPosition.y=ofToFloat(components[4]);
 
+			cout<<receivedPosition.x<<"  "<<receivedPosition.y;*/
+
+	    }
+		else if(components[0]=="Scaling Up"||components[0]=="Scaling Down")
+			scaling_factor=ofToFloat(components[1]);
+		
+		else if(components[0]=="Rotate")
+		{
+			if(components[1]=="Z")
+				receivedRotation.y+=ofToFloat(components[2])/100;
+			if(components[1]=="Y")
+				receivedRotation.x+=ofToFloat(components[2])/150;
+
+		}
+
+}
 }
  
 
@@ -75,10 +93,17 @@ void testApp::draw(){
 
 	cam.begin();	
 	ofPushMatrix();
+	    
+	ofRotateY(receivedRotation.y);
+	ofRotateX(receivedRotation.x);	
+	ofTranslate(-model.getPosition().x,-model.getPosition().y/2,0);
+		//ofTranslate( receivedPosition.y*y_conversion,receivedPosition.x*x_conversion, 0);
 	
-		ofTranslate(-model.getPosition().x, -model.getPosition().y/2, 0);
 
-		model.drawFaces();
+	model.drawFaces();
+		
+		
+		model.setScale(scaling_factor,scaling_factor,scaling_factor);
 
     ofPopMatrix();
 	cam.end();
@@ -96,7 +121,8 @@ void testApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void testApp::keyReleased(int key){
-
+	if(key=='r')
+		receivedPosition.x=receivedPosition.y=0;
 }
 
 //--------------------------------------------------------------
