@@ -10,7 +10,7 @@ void testApp::setup(){
 	 // we need GL_TEXTURE_2D for our models coords.
     ofDisableArbTex();
 
-    if(model.loadModel("astroBoy_walk.dae",true)){
+    if(model.loadModel("WoodenBox/Wooden Box.obj",true)){
     	model.setAnimation(0);
     	model.setPosition(ofGetWidth()/2, (float)ofGetHeight() * 0.75 , 0);
     	//model.createLightsFromAiModel();
@@ -42,7 +42,7 @@ void testApp::setup(){
 
 	modelInitialPosition.x=-model.getPosition().x;
 	modelInitialPosition.y=-model.getPosition().y/2;
-
+model.setRotation(0,180,1,0,0);
 }
 
 //--------------------------------------------------------------
@@ -92,12 +92,14 @@ void testApp::draw(){
 
 
 	cam.begin();	
+	ofFill();
+	ofDrawAxis(1000);
 	ofPushMatrix();
 	    
 	ofRotateY(receivedRotation.y);
 	ofRotateX(receivedRotation.x);	
-	ofTranslate(-model.getPosition().x,-model.getPosition().y/2,0);
-		//ofTranslate( receivedPosition.y*y_conversion,receivedPosition.x*x_conversion, 0);
+	ofTranslate(-model.getPosition().x,-model.getPosition().y-model.getPosition().y/4,model.getPosition().z/2);
+    //ofTranslate( receivedPosition.y*y_conversion,receivedPosition.x*x_conversion, 0);
 	
 
 	model.drawFaces();
